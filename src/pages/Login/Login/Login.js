@@ -1,14 +1,71 @@
-import { Container, Grid } from "@mui/material";
-import React from "react";
+import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import loginImg from "../../../images/login.png";
 
 const Login = () => {
+  const [loginData, setLoginData] = useState({});
+  const handleOnChange = (e) => {
+    const field = e.target.name;
+    const value = e.target.value;
+    const newLoginData = { ...loginData };
+    newLoginData[field] = value;
+    setLoginData(newLoginData);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Login");
+  };
   return (
     <div>
       <Container sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item xs={8}></Grid>
-          <Grid item xs={12} md={6}></Grid>
+          <Grid sx={{ width: 1, mt: 10 }} item xs={12} md={6}>
+            <Typography variant="h2" gutterBottom component="div">
+              Login
+            </Typography>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                sx={{ width: "75%", mt: 3 }}
+                id="standard-basic"
+                label="Email"
+                variant="standard"
+                name="email"
+                type="email"
+                onChange={handleOnChange}
+              />
+              <TextField
+                sx={{ width: "75%", mt: 3, mb: 3 }}
+                id="standard-basic"
+                label="Password"
+                type="password"
+                variant="standard"
+                name="password"
+                onChange={handleOnChange}
+              />
+              <Button sx={{ width: "75%", mt: 1 }} variant="contained">
+                Login
+              </Button>
+            </form>
+            <br></br>
+            <p>
+              Don't have any account?{" "}
+              <Link
+                to="/register"
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                <Button
+                  style={{ color: "black", textTransform: "capitalize" }}
+                  variant="text"
+                >
+                  Register
+                </Button>
+              </Link>
+            </p>
+            <p>
+              Wanna Go <Link to="/">Homepage?</Link>
+            </p>
+          </Grid>
           <Grid item xs={12} md={6}>
             <img
               style={{ width: "auto", height: "100vh" }}
