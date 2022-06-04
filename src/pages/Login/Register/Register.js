@@ -26,7 +26,7 @@ const Register = () => {
         <Grid container spacing={2}>
           <Grid sx={{ width: 1, mt: 10 }} item xs={12} md={6}>
             <Typography variant="h2" gutterBottom component="div">
-              Login
+              Registration
             </Typography>
             <form onSubmit={handleSubmit}>
               <TextField
