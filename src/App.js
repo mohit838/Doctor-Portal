@@ -3,6 +3,7 @@ import Home from "./pages/Home/Home/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Appointment from "./pages/Appointment/Appointment/Appoinment";
 import Login from "./pages/Login/Login/Login";
+import Register from "./pages/Login/Register/Register";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/home" element={<Home />}></Route>
           <Route path="/appointment" element={<Appointment />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Router>
     </div>
