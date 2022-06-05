@@ -7,10 +7,14 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
+import useAuth from "../../../Hooks/useAuth";
 
 const Header = () => {
+  const { user, logOut } = useAuth();
+
   const textColor = {
     color: "white",
+    textDecoration: "none",
   };
 
   return (
@@ -28,16 +32,23 @@ const Header = () => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              <Link to="/">
-                <h5 style={textColor}>Doctors Portal</h5>
+              <Link style={textColor} to="/">
+                <h5>Doctors Portal</h5>
               </Link>
             </Typography>
-            <Link to="/appointment">
-              <Button style={textColor}>Appointment</Button>
+            <Link style={{ textDecoration: "none" }} to="/appointment">
+              <Button style={{ color: "white" }}>Appointment</Button>
             </Link>
-            <Link to="/login">
-              <Button style={textColor}>Login</Button>
-            </Link>
+
+            {user?.email ? (
+              <Button onClick={logOut} style={textColor}>
+                LogOut
+              </Button>
+            ) : (
+              <Link style={{ textDecoration: "none" }} to="/login">
+                <Button style={{ color: "white" }}>Login</Button>
+              </Link>
+            )}
           </Toolbar>
         </AppBar>
       </Box>

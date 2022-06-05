@@ -53,7 +53,7 @@ const Banner = () => {
               }}
             >
               {/* Get Appointment */}
-              <Link to="/appointment">
+              <Link style={{ textDecoration: "none" }} to="/appointment">
                 <Button style={{ color: "white" }}>Appointment</Button>
               </Link>
             </Button>

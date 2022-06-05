@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 
 //Initailized Firebase Auth
@@ -12,21 +13,50 @@ initializedFirebase();
 
 const useFirebase = () => {
   const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [authError, setAuthError] = useState("");
 
   const auth = getAuth();
 
   //LogIn User Using Email
   const createNewUser = (email, password) => {
+    setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        // ...
+
+        // const user = userCredential.user;
+
+        // To Clear AuthError
+        setAuthError("");
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
+        // const errorCode = error.code;
+        setAuthError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  //SignIn User
+  const signIn = (email, password) => {
+    setIsLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+
+        // const user = userCredential.user;
+
+        // To Clear AuthError
+        setAuthError("");
+      })
+      .catch((error) => {
+        // const errorCode = error.code;
+        setAuthError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -34,11 +64,12 @@ const useFirebase = () => {
   useEffect(() => {
     const unSubcribed = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const uid = user.uid;
+        // const uid = user.uid;
         setUser(user);
       } else {
         setUser({});
       }
+      setIsLoading(false);
     });
     return () => unSubcribed;
   }, []);
@@ -52,12 +83,18 @@ const useFirebase = () => {
       })
       .catch((error) => {
         // An error happened.
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
   return {
     user,
+    isLoading,
     createNewUser,
+    authError,
+    signIn,
     logOut,
   };
 };

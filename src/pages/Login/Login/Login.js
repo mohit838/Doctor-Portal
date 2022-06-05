@@ -1,10 +1,22 @@
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useAuth from "../../../Hooks/useAuth";
 import loginImg from "../../../images/login.png";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({});
+
+  const { user, signIn, isLoading, authError } = useAuth();
+
   const handleOnChange = (e) => {
     const field = e.target.name;
     const value = e.target.value;
@@ -12,9 +24,9 @@ const Login = () => {
     newLoginData[field] = value;
     setLoginData(newLoginData);
   };
-  const handleSubmit = (e) => {
+  const handleLogInSubmit = (e) => {
+    signIn(loginData.email, loginData.password);
     e.preventDefault();
-    alert("Login");
   };
   return (
     <div>
@@ -24,29 +36,42 @@ const Login = () => {
             <Typography variant="h2" gutterBottom component="div">
               Login
             </Typography>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                sx={{ width: "75%", mt: 3 }}
-                id="standard-basic"
-                label="Email"
-                variant="standard"
-                name="email"
-                type="email"
-                onChange={handleOnChange}
-              />
-              <TextField
-                sx={{ width: "75%", mt: 3, mb: 3 }}
-                id="standard-basic"
-                label="Password"
-                type="password"
-                variant="standard"
-                name="password"
-                onChange={handleOnChange}
-              />
-              <Button sx={{ width: "75%", mt: 1 }} variant="contained">
-                Login
-              </Button>
-            </form>
+            {!isLoading && (
+              <form onSubmit={handleLogInSubmit}>
+                <TextField
+                  sx={{ width: "75%", mt: 3 }}
+                  id="standard-basic"
+                  label="Email"
+                  variant="standard"
+                  name="email"
+                  type="email"
+                  onChange={handleOnChange}
+                />
+                <TextField
+                  sx={{ width: "75%", mt: 3, mb: 3 }}
+                  id="standard-basic"
+                  label="Password"
+                  type="password"
+                  variant="standard"
+                  name="password"
+                  onChange={handleOnChange}
+                />
+                <Button
+                  sx={{ width: "75%", mt: 1 }}
+                  type="submit"
+                  variant="contained"
+                >
+                  Login
+                </Button>
+              </form>
+            )}
+            <br></br>
+            {isLoading && <CircularProgress color="secondary" />}
+            {user?.email && (
+              <Alert severity="success">Account Login SuccessFull!!</Alert>
+            )}
+            {authError && <Alert severity="error">{authError}</Alert>}
+            <br></br>
             <br></br>
             <p>
               Don't have any account?{" "}
