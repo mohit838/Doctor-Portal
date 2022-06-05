@@ -15,7 +15,8 @@ import loginImg from "../../../images/login.png";
 const Login = () => {
   const [loginData, setLoginData] = useState({});
 
-  const { user, signIn, isLoading, authError } = useAuth();
+  const { user, signIn, isLoading, authError, signInWithGooglePopup } =
+    useAuth();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ const Login = () => {
   const handleLogInSubmit = (e) => {
     signIn(loginData.email, loginData.password, location, navigate);
     e.preventDefault();
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGooglePopup(location, navigate);
   };
   return (
     <div>
@@ -48,7 +53,7 @@ const Login = () => {
                   variant="standard"
                   name="email"
                   type="email"
-                  onChange={handleOnChange}
+                  onBlur={handleOnChange}
                 />
                 <TextField
                   sx={{ width: "75%", mt: 3, mb: 3 }}
@@ -57,7 +62,7 @@ const Login = () => {
                   type="password"
                   variant="standard"
                   name="password"
-                  onChange={handleOnChange}
+                  onBlur={handleOnChange}
                 />
                 <Button
                   sx={{ width: "75%", mt: 1 }}
@@ -69,12 +74,13 @@ const Login = () => {
               </form>
             )}
             <br></br>
-            {isLoading && <CircularProgress color="secondary" />}
-            {user?.email && (
-              <Alert severity="success">Account Login SuccessFull!!</Alert>
-            )}
-            {authError && <Alert severity="error">{authError}</Alert>}
-            <br></br>
+            <Button
+              onClick={handleGoogleSignIn}
+              sx={{ width: "25%", mt: 1 }}
+              variant="contained"
+            >
+              Google SignIn
+            </Button>
             <br></br>
             <p>
               Don't have any account?{" "}
@@ -93,6 +99,13 @@ const Login = () => {
             <p>
               Wanna Go <Link to="/">Homepage?</Link>
             </p>
+            <br></br>
+            {isLoading && <CircularProgress color="secondary" />}
+            {user?.email && (
+              <Alert severity="success">Account Login SuccessFull!!</Alert>
+            )}
+            {authError && <Alert severity="error">{authError}</Alert>}
+            <br></br>
           </Grid>
           <Grid item xs={12} md={6}>
             <img

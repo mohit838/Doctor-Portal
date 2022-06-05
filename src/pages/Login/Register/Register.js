@@ -7,17 +7,18 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
 import loginImg from "../../../images/login.png";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Register = () => {
   const [regData, setRegData] = useState({});
+  const navigate = useNavigate();
 
   const { user, createNewUser, isLoading, authError } = useAuth();
 
-  const handleOnChange = (e) => {
+  const handleOnBlur = (e) => {
     const field = e.target.name;
     const value = e.target.value;
     const newRegData = { ...regData };
@@ -30,7 +31,7 @@ const Register = () => {
       return;
     }
 
-    createNewUser(regData.email, regData.password);
+    createNewUser(regData.email, regData.password, regData.name, navigate);
 
     e.preventDefault();
   };
@@ -48,11 +49,20 @@ const Register = () => {
                 <TextField
                   sx={{ width: "75%", mt: 3 }}
                   id="standard-basic"
+                  label="Name"
+                  variant="standard"
+                  name="name"
+                  type="text"
+                  onBlur={handleOnBlur}
+                />
+                <TextField
+                  sx={{ width: "75%", mt: 3 }}
+                  id="standard-basic"
                   label="Email"
                   variant="standard"
                   name="email"
                   type="email"
-                  onChange={handleOnChange}
+                  onBlur={handleOnBlur}
                 />
                 <TextField
                   sx={{ width: "75%", mt: 3 }}
@@ -61,7 +71,7 @@ const Register = () => {
                   type="password"
                   variant="standard"
                   name="password"
-                  onChange={handleOnChange}
+                  onBlur={handleOnBlur}
                 />
                 <TextField
                   sx={{ width: "75%", mt: 3, mb: 3 }}
@@ -70,7 +80,7 @@ const Register = () => {
                   type="password"
                   variant="standard"
                   name="passwordTwo"
-                  onChange={handleOnChange}
+                  onBlur={handleOnBlur}
                 />
 
                 <br></br>

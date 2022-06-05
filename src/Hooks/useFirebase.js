@@ -6,6 +6,9 @@ import {
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  updateProfile,
 } from "firebase/auth";
 
 //Initailized Firebase Auth
@@ -18,17 +21,31 @@ const useFirebase = () => {
 
   const auth = getAuth();
 
+  const googleProvider = new GoogleAuthProvider();
+
   //LogIn User Using Email
-  const createNewUser = (email, password) => {
+  const createNewUser = (email, password, name, navigate) => {
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
-
-        // const user = userCredential.user;
-
-        // To Clear AuthError
         setAuthError("");
+        const newUser = { email, displayName: name };
+        setUser(newUser);
+
+        // Must set display name
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        })
+          .then(() => {
+            // Profile updated!
+            // ...
+          })
+          .catch((error) => {
+            // An error occurred
+            // ...
+          });
+
+        navigate("/");
       })
       .catch((error) => {
         // const errorCode = error.code;
@@ -39,15 +56,28 @@ const useFirebase = () => {
       });
   };
 
-  //SignIn User
+  //SignIn with Google
+  const signInWithGooglePopup = (location, navigate) => {
+    setIsLoading(true);
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        const destination = location?.state?.from || "/";
+        navigate(destination);
+        setAuthError("");
+      })
+      .catch((error) => {
+        setAuthError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  //SignIn User With Password
   const signIn = (email, password, location, navigate) => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
-
-        // const user = userCredential.user;
-
         //For Location and  Navigate
         const destination = location?.state?.from || "/";
         navigate(destination);
@@ -56,7 +86,6 @@ const useFirebase = () => {
         setAuthError("");
       })
       .catch((error) => {
-        // const errorCode = error.code;
         setAuthError(error.message);
       })
       .finally(() => {
@@ -99,6 +128,7 @@ const useFirebase = () => {
     createNewUser,
     authError,
     signIn,
+    signInWithGooglePopup,
     logOut,
   };
 };
