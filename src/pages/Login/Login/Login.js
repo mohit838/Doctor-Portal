@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
 import loginImg from "../../../images/login.png";
 
@@ -16,6 +16,9 @@ const Login = () => {
   const [loginData, setLoginData] = useState({});
 
   const { user, signIn, isLoading, authError } = useAuth();
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const field = e.target.name;
@@ -25,7 +28,7 @@ const Login = () => {
     setLoginData(newLoginData);
   };
   const handleLogInSubmit = (e) => {
-    signIn(loginData.email, loginData.password);
+    signIn(loginData.email, loginData.password, location, navigate);
     e.preventDefault();
   };
   return (

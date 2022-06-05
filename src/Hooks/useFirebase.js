@@ -40,13 +40,17 @@ const useFirebase = () => {
   };
 
   //SignIn User
-  const signIn = (email, password) => {
+  const signIn = (email, password, location, navigate) => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
 
         // const user = userCredential.user;
+
+        //For Location and  Navigate
+        const destination = location?.state?.from || "/";
+        navigate(destination);
 
         // To Clear AuthError
         setAuthError("");
