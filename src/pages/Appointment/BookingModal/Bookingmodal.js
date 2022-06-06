@@ -29,7 +29,6 @@ const Bookingmodal = ({ open, handleClose, booking, date }) => {
   const handleBookingSubmit = (e) => {
     e.preventDefault();
     handleClose();
-    // alert("Working");
   };
 
   return (
