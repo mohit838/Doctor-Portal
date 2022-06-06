@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -21,14 +21,59 @@ const style = {
   textAlign: "center",
 };
 
-const Bookingmodal = ({ open, handleClose, booking, date }) => {
+const Bookingmodal = ({
+  open,
+  handleClose,
+  booking,
+  date,
+  setBookingSuccessful,
+}) => {
   const { name, time } = booking;
 
   const { user } = useAuth();
 
+  const initialInfo = {
+    patientName: user.displayName,
+    patientEmail: user.email,
+    phone: " ",
+  };
+
+  const [bookingInfo, setBookingInfo] = useState(initialInfo);
+
+  const handleOnBlur = (e) => {
+    const field = e.target.name;
+    const value = e.target.value;
+    const newInfo = { ...bookingInfo };
+    newInfo[field] = value;
+    setBookingInfo(newInfo);
+  };
+
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    handleClose();
+    //Collect Data
+    const appointment = {
+      ...bookingInfo,
+      time,
+      serviceName: name,
+      // toLocalDateString() leading to an error "Not a funciton"
+      date: date.toDateString(),
+    };
+
+    //Send to the server
+    fetch("http://localhost:5000/appointments", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(appointment),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          setBookingSuccessful(true);
+          handleClose();
+        }
+      });
   };
 
   return (
@@ -62,6 +107,8 @@ const Bookingmodal = ({ open, handleClose, booking, date }) => {
               <TextField
                 sx={{ width: "90%", m: 3 }}
                 id="standard-size-small"
+                name="patientName"
+                onBlur={handleOnBlur}
                 defaultValue={user.displayName}
                 size="small"
                 variant="standard"
@@ -69,6 +116,8 @@ const Bookingmodal = ({ open, handleClose, booking, date }) => {
               <TextField
                 sx={{ width: "90%", m: 3 }}
                 id="standard-size-small"
+                name="patientEmail"
+                onBlur={handleOnBlur}
                 defaultValue={user.email}
                 size="small"
                 variant="standard"
@@ -76,6 +125,8 @@ const Bookingmodal = ({ open, handleClose, booking, date }) => {
               <TextField
                 sx={{ width: "90%", m: 3 }}
                 id="standard-size-small"
+                name="phone"
+                onBlur={handleOnBlur}
                 defaultValue="Your Phone"
                 size="small"
                 variant="standard"
