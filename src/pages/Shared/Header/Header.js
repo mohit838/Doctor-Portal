@@ -41,9 +41,14 @@ const Header = () => {
             </Link>
 
             {user?.email ? (
-              <Button onClick={logOut} style={textColor}>
-                LogOut
-              </Button>
+              <Box>
+                <Link style={{ textDecoration: "none" }} to="/dashboard">
+                  <Button style={{ color: "white" }}>Dashboard</Button>
+                </Link>
+                <Button onClick={logOut} style={textColor}>
+                  LogOut
+                </Button>
+              </Box>
             ) : (
               <Link style={{ textDecoration: "none" }} to="/login">
                 <Button style={{ color: "white" }}>Login</Button>
