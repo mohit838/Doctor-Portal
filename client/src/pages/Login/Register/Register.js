@@ -120,7 +120,7 @@ const Register = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <img
-              style={{ width: "auto", height: "100vh" }}
+              style={{ width: "auto", height: "85vh" }}
               src={loginImg}
               alt="login Img"
             />
