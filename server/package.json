@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "server": "nodemon index.js",
+    "dev": "concurrently \" npm run server \" \" yarn start --prefix ../client \"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Mohammad Mohitul Islam",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^7.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
