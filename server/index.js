@@ -7,6 +7,7 @@ const port = process.env.PORT || 5000;
 
 // Middlewire
 app.use(cors());
+
 // We want JSON data from frontend
 app.use(express.json());
 
@@ -35,7 +36,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello Doctors Portal!");
 });
 
 app.listen(port, () => {
